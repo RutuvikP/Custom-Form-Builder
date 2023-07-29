@@ -4,9 +4,12 @@ const { FormModel } = require('../models/Form.model');
 const formRoutes=Router();
 
 formRoutes.get('/:ID',async(req,res)=>{
-    const forms=await FormModel.findOne({"formID":req.params.ID})
-    console.log(forms);
-    res.send(forms)
+    try {
+        const forms=await FormModel.findOne({"formID":req.params.ID})
+        res.send(forms) 
+    } catch (error) {
+        res.send({"msg":error.message})
+    }
 })
 
 formRoutes.post('/new',async(req,res)=>{
