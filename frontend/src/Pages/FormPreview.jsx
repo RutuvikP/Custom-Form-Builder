@@ -1,22 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const FormPreview = () => {
     const { formID } = useParams()
     const [data, setData] = useState({})
     const [timer, setTimer] = useState(false)
     const [answer, setAnswer] = useState([])
+    const navigate=useNavigate();
 
     // For storing Email and Password
     const [email,setEmail] = useState("");
     const [name,setName] = useState("");
 
     useEffect(() => {
-        fetch(`http://localhost:8080/forms/${formID}`)
+        fetch(`https://formbulder-server.onrender.com/forms/${formID}`)
             .then((res) => res.json())
             .then((res) => {
-                console.log(res);
+                // console.log(res);
                 setData(res)
+            })
+            .catch((err)=>{
+                console.log(err);
             })
     }, [])
 
@@ -24,17 +28,17 @@ const FormPreview = () => {
     let [responses, setResponses] = useState([]);
 
     const handleSubmit = () => {
-        fetch(`http://localhost:8080/response/add`,{
+        fetch(`https://formbulder-server.onrender.com/response/add`,{
             method:"POST",
             headers:{"Content-Type":"application/json"},
             body:JSON.stringify({formID,name,email,"responses":answer})
         })
         .then((res)=>res.json())
         .then((res)=>{
-            alert("Response Saved!!")
+            navigate('/thankyou')
         })
         .catch((err)=>{
-            console.log(err);
+            // console.log(err);
         })
     };
 
@@ -56,12 +60,13 @@ const FormPreview = () => {
         let question = `question${i + 1}`
         setAnswer([...answer, { [question]: responses }])
         setResponses([])
+        alert("Answer Submitted!")
     }
 
     const countdownTimer = () => {
         let count = 0;
         const ID = setInterval(() => {
-            if (count == 3) {
+            if (count == 5) {
                 setTimer(true)
                 clearInterval(ID)
             } else {
@@ -160,7 +165,7 @@ const FormPreview = () => {
                                                     setTimeout(() => {
                                                         setResponses([...responses, e.target.value])
                                                         countdownTimer()
-                                                    }, 3000)
+                                                    }, 4000)
                                                 }}
                                         
                                                 type='text'
@@ -174,7 +179,7 @@ const FormPreview = () => {
                                             disabled={!timer ? true : false}
                                             onClick={() => handleAnswerSubmit(index, question.type)}
                                         >
-                                            {!timer?"Please wait..":"Submit ANswer"}
+                                            {!timer?"Please wait..":"Submit Answer"}
                                         </button>
                                     </div>
                                 )}

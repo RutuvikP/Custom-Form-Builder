@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const CategorizeQuestion = ({ onDelete, questionIndex, updateQuestionData }) => {
-  // State to store question details
+
   const [questionTitle, setQuestionTitle] = useState('');
   const [headerImage, setHeaderImage] = useState(null);
   const [categories, setCategories] = useState(['', '']);
@@ -32,7 +32,7 @@ const CategorizeQuestion = ({ onDelete, questionIndex, updateQuestionData }) => 
     setNames([...names, { name: '', category: '' }]);
   };
 
-  // Function to handle deleting an option (Name and Category)
+  // Function to handle deleting an option
   const handleDeleteOption = (index) => {
     const updatedNames = [...names];
     updatedNames.splice(index, 1);
@@ -137,7 +137,10 @@ const CategorizeQuestion = ({ onDelete, questionIndex, updateQuestionData }) => 
       </button>
       <button
         className="bg-green-500  text-white px-4 py-2 rounded focus:outline-none mt-4"
-        onClick={()=>updateQuestionData(questionIndex,{questionTitle,categories,names})}
+        onClick={()=>{
+          updateQuestionData(questionIndex,{questionTitle,categories,names})
+          alert("Question Saved!")
+        }}
       >
         Save Question
       </button>

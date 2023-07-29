@@ -76,15 +76,14 @@ const FormBuilder = () => {
 
     setFormID(randomId)
 
-    fetch(`http://localhost:8080/forms/new`,{
+    fetch(`https://formbulder-server.onrender.com/forms/new`,{
       method:"POST",
       headers:{"Content-Type":'application/json'},
       body:JSON.stringify({formTitle,questions,"formID":randomId})
     })
     .then((res)=>res.json())
     .then((res)=>{
-      console.log(res);
-      alert("Form Saved to DB!!")
+      alert("Form Saved!!")
     })
     .catch((err)=>{
       console.log(err);
@@ -93,7 +92,7 @@ const FormBuilder = () => {
 
   return (
     <div className="max-w-3xl mx-auto mt-6 p-4 rounded-md border-2 border-slate-300">
-      <h1 className='text-2xl font-semibold mb-6 text-center underline'>Questionarie Form Template</h1>
+      <h1 className='text-2xl font-semibold mb-6 text-center underline'>Questionnaire Form Template</h1>
       {/* Form Title and Edit Button */}
       <div className="flex items-center mb-4">
         <input type="file" accept="image/*" onChange={handleHeaderImageUpload} />
@@ -130,6 +129,21 @@ const FormBuilder = () => {
         <span className="text-xl font-bold">{formTitle}</span>
       </div>
 
+      {/* Display Added Questions */}
+      {questions.map((question, index) => (
+        <div key={index} className="mb-4">
+          {question.type === 'Categorize' && (
+            <CategorizeQuestion updateQuestionData={updateQuestionData}  questionIndex={index} onDelete={() => handleDeleteQuestion(index)} />
+          )}
+          {question.type === 'Cloze' && (
+            <ClozeQuestion updateQuestionData={updateQuestionData}  questionIndex={index} onDelete={() => handleDeleteQuestion(index)} />
+          )}
+          {question.type === 'Comprehension' && (
+            <ComprehensionQuestion updateQuestionData={updateQuestionData}  questionIndex={index} onDelete={() => handleDeleteQuestion(index)} />
+          )}
+        </div>
+      ))}
+
       {/* Add Question Buttons */}
       <div className="mb-4 p-1.5 rounded-md border-2 border-slate-300">
         <label className="text-lg font-semibold block text-center">Add Question:</label>
@@ -154,21 +168,6 @@ const FormBuilder = () => {
           </button>
         </div>
       </div>
-
-      {/* Display Added Questions */}
-      {questions.map((question, index) => (
-        <div key={index} className="mb-4">
-          {question.type === 'Categorize' && (
-            <CategorizeQuestion updateQuestionData={updateQuestionData}  questionIndex={index} onDelete={() => handleDeleteQuestion(index)} />
-          )}
-          {question.type === 'Cloze' && (
-            <ClozeQuestion updateQuestionData={updateQuestionData}  questionIndex={index} onDelete={() => handleDeleteQuestion(index)} />
-          )}
-          {question.type === 'Comprehension' && (
-            <ComprehensionQuestion updateQuestionData={updateQuestionData}  questionIndex={index} onDelete={() => handleDeleteQuestion(index)} />
-          )}
-        </div>
-      ))}
 
       {/* Preview/Fill Link */}
       <div className="flex space-x-2 justify-center items-center">

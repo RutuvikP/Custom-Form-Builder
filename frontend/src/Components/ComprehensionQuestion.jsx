@@ -46,8 +46,6 @@ const ComprehensionQuestion = ({onDelete,questionIndex, updateQuestionData}) => 
     setQuestions(updatedQuestions);
   };
 
-  // console.log({instructions,passage,"subquestions":questions});
-
   return (
     <div className="my-6">
       <div className='flex justify-around items-center border p-1 bg-slate-100'>
@@ -177,7 +175,10 @@ const ComprehensionQuestion = ({onDelete,questionIndex, updateQuestionData}) => 
       </button>
       <button
         className="bg-green-500  text-white px-4 py-2 rounded focus:outline-none mt-4"
-        onClick={()=>updateQuestionData(questionIndex,{instructions,passage,"subquestions":questions})}
+        onClick={()=>{
+          updateQuestionData(questionIndex,{instructions,passage,"subquestions":questions})
+          alert("Question Saved!")
+        }}
       >
         Save Question
       </button>
