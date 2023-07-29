@@ -50,7 +50,7 @@ const ComprehensionQuestion = ({onDelete,questionIndex, updateQuestionData}) => 
 
   return (
     <div className="my-6">
-      <div className='flex justify-around border p-1 bg-slate-100'>
+      <div className='flex justify-around items-center border p-1 bg-slate-100'>
         <h2 className="text-lg font-semibold">Question {questionIndex+1}</h2>
         <button
           className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded focus:outline-none"
@@ -168,6 +168,7 @@ const ComprehensionQuestion = ({onDelete,questionIndex, updateQuestionData}) => 
       </div>
 
       {/* Add More Question */}
+      <div className="flex space-x-2 justify-center">
       <button
         className="bg-green-500  text-white px-4 py-2 rounded focus:outline-none mt-4"
         onClick={handleAddQuestion}
@@ -180,6 +181,7 @@ const ComprehensionQuestion = ({onDelete,questionIndex, updateQuestionData}) => 
       >
         Save Question
       </button>
+      </div>
     </div>
   );
 };

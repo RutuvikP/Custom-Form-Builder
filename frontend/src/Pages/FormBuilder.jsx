@@ -8,6 +8,7 @@ const FormBuilder = () => {
   // State to store the header image and form title
   const [headerImage, setHeaderImage] = useState(null);
   const [formTitle, setFormTitle] = useState('');
+  const [formID,setFormID] = useState("")
 
   // State to store the form questions
   const [questions, setQuestions] = useState([]);
@@ -63,10 +64,36 @@ const FormBuilder = () => {
     handleQuestionData(index,data)
   }
 
-  // console.log(questions);
+  const handleFormSave=()=>{
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+[]{}|;:,.<>?';
+    const charactersLength = characters.length;
+    let randomId = '';
+
+    for (let i = 0; i < 5; i++) {
+      const randomIndex = Math.floor(Math.random() * charactersLength);
+      randomId += characters.charAt(randomIndex);
+    }
+
+    setFormID(randomId)
+
+    fetch(`http://localhost:8080/forms/new`,{
+      method:"POST",
+      headers:{"Content-Type":'application/json'},
+      body:JSON.stringify({formTitle,questions,"formID":randomId})
+    })
+    .then((res)=>res.json())
+    .then((res)=>{
+      console.log(res);
+      alert("Form Saved to DB!!")
+    })
+    .catch((err)=>{
+      console.log(err);
+    })
+  }
 
   return (
-    <div className="max-w-3xl mx-auto mt-6 p-4">
+    <div className="max-w-3xl mx-auto mt-6 p-4 rounded-md border-2 border-slate-300">
+      <h1 className='text-2xl font-semibold mb-6 text-center underline'>Questionarie Form Template</h1>
       {/* Form Title and Edit Button */}
       <div className="flex items-center mb-4">
         <input type="file" accept="image/*" onChange={handleHeaderImageUpload} />
@@ -86,7 +113,7 @@ const FormBuilder = () => {
       </div>
 
       {/* Header Image */}
-      <div className="flex items-center mb-4">
+      <div className="flex items-center justify-center mb-4">
         <div className="rounded-full overflow-hidden w-12 h-12 mr-4">
           {headerImage ? (
             <img
@@ -104,9 +131,9 @@ const FormBuilder = () => {
       </div>
 
       {/* Add Question Buttons */}
-      <div className="mb-4">
-        <label className="text-lg font-semibold">Add Question:</label>
-        <div className="flex space-x-2">
+      <div className="mb-4 p-1.5 rounded-md border-2 border-slate-300">
+        <label className="text-lg font-semibold block text-center">Add Question:</label>
+        <div className="flex space-x-2 justify-center">
           <button
             className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded focus:outline-none"
             onClick={() => handleAddQuestion('Categorize')}
@@ -144,20 +171,22 @@ const FormBuilder = () => {
       ))}
 
       {/* Preview/Fill Link */}
-      <div className="mt-4">
+      <div className="flex space-x-2 justify-center items-center">
+      <div className="mt-4 px-4 py-2 rounded">
         <Link
-          to="/preview-fill"
+          to={`/preview-fill/${formID}`}
           className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded focus:outline-none"
         >
-          Preview/Fill
+          Preview Form
         </Link>
       </div>
       <button
         className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded focus:outline-none mt-4"
-        onClick={()=>console.log({formTitle,questions})}
+        onClick={handleFormSave}
       >
-        Save Question
+        Save Form
       </button>
+      </div>
     </div>
   );
 };
